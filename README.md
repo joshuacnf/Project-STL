@@ -1,7 +1,7 @@
 # Project-STL
 Project STL is a tiny personal project.
 <br>The basic ideas about this project are:
-<br>1. Hands-on implementation of some useful/classical/interesting algorithms and data structures.
+<br>1. Hands-on implementation of some useful/classic/interesting algorithms and data structures.
 <br>2. Brief reports/summaries for the most important ones of these algorithms and data structures.
 <br>
 <br>Because the secondary objective of this project is building a mini "STL" for later convenience in coding, so it is named after STL.
