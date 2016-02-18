@@ -1,34 +1,85 @@
 #include <cstdio>
+#include <cstdlib>
+#include <algorithm>
 using namespace std;
 
-#define N 50007
+#define N 100007
 
-template <typename T> inline void swap_(T &x, T &y) {
-    if(x != y) x ^= y, y ^= x, x ^= y;
+template <typename T> inline void swap_(T &x, T &y)
+{
+    T z = x; x = y; y = z;
 }
 
-int A[N] = {0}, n;
-
-void QUICK_SORT(const int &l, const int &r){
-    swap_(A[(l + r) >> 1], A[r]);
-    
-    int pos = l;
-    for(int i = l; i < r; i++)
-        if(A[i] < A[r]){
-            swap_(A[pos], A[i]);
+template <typename iter, typename compare_func>
+void qsort_(iter s, iter e, compare_func comp){
+    iter pos = s; e--;
+    for(iter i = s; i != e; i++)
+        if(comp(*i, *e))
+        {
+            swap_(*pos, *i);
             pos++;
         }
-    swap_(A[pos], A[r]);
-    if(l < pos - 1) QUICK_SORT(l, pos - 1);
-    if(pos + 1 < r) QUICK_SORT(pos + 1, r);
+    swap_(*pos, *e);
+    if(s < pos - 1) qsort_(s, pos, comp);
+    if(pos + 1 < e) qsort_(pos + 1, e + 1, comp);
+}
+
+template <typename iter>
+void qsort_(iter s, iter e){
+    iter pos = s; e--;
+    for(iter i = s; i != e; i++)
+        if(*i < *e)
+        {
+            swap_(*pos, *i);
+            pos++;
+        }
+    swap_(*pos, *e);
+    if(s < pos - 1) qsort_(s, pos);
+    if(pos + 1 < e) qsort_(pos + 1, e + 1);
+}
+
+bool comp(const int &x, const int &y)
+{
+    return x > y;
+}
+
+int A[N] = {0}, B[N] = {0};
+
+void init()
+{
+    for (int i = 0; i < N; i++)
+        A[i] = B[i] = rand() % (N << 1);
+}
+
+bool test1()
+{
+    qsort_(A, A + N);
+    sort(B, B + N);
+    for (int i = 0; i < N; i++)
+        if (A[i] != B[i])
+            return false;
+    return true;
+}
+
+bool test2()
+{
+    qsort_(A, A + N, comp);
+    sort(B, B + N, comp);
+    for (int i = 0; i < N; i++)
+        if (A[i] != B[i])
+            return false;
+    return true;
 }
 
 int main(){
-    scanf("%d", &n);
-    for(int i = 0; i < n; i++)
-        scanf("%d", &A[i]);
-    QUICK_SORT(0, n - 1);
-    for(int i = 0; i < n; i++)
-        printf("%d\n", A[i]);
+    init();
+    if (test1())
+        printf("Passed\n");
+    else printf("Failed\n");
+    
+    init();
+    if (test2())
+        printf("Passed\n");
+    else printf("Failed\n");
     return 0;
 }
